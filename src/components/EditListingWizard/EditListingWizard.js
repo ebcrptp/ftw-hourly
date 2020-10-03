@@ -41,11 +41,11 @@ const availabilityMaybe = config.enableAvailability ? [AVAILABILITY] : [];
 export const TABS = [
   DESCRIPTION,
   FEATURES,
-  //POLICY,
-  LOCATION,
+  POLICY,
+  //LOCATION,
   PRICING,
   ...availabilityMaybe,
-  PHOTOS,
+  //PHOTOS,
 ];
 
 // Tabs are horizontal in small screens

@@ -9,27 +9,27 @@ const { LatLng, LatLngBounds } = sdkTypes;
 // `predictionPlace` (util.types.place) properties.
 export default [
   {
-    id: 'default-new-york',
+    id: 'default-europe',
     predictionPlace: {
-      address: 'New York City, New York, USA',
+      address: 'Europe',
       bounds: new LatLngBounds(
-        new LatLng(40.917576401307, -73.7008392055224),
-        new LatLng(40.477399, -74.2590879797556)
+        new LatLng(40.472944, -33.127037 ),
+        new LatLng(71.612415, -24.362691)
       ),
     },
   },
   {
-    id: 'default-los-angeles',
+    id: 'default-united-states',
     predictionPlace: {
-      address: 'Los Angeles, California, USA',
+      address: 'USA',
       bounds: new LatLngBounds(
-        new LatLng(34.161440999758, -118.121305008073),
-        new LatLng(33.9018913203336, -118.521456965901)
+        new LatLng(48.435571, -110.058789),
+        new LatLng(45.635286, -79.983817)
       ),
     },
   },
   {
-    id: 'default-san-francisco',
+    id: 'default-San-Francisco',
     predictionPlace: {
       address: 'San Francisco, California, USA',
       bounds: new LatLngBounds(
@@ -39,22 +39,12 @@ export default [
     },
   },
   {
-    id: 'default-seattle',
+    id: 'default-stockholm',
     predictionPlace: {
-      address: 'Seattle, Washington, USA',
+      address: 'Stockholm, Sweden, Europe',
       bounds: new LatLngBounds(
-        new LatLng(47.7779392908564, -122.216605992108),
-        new LatLng(47.3403950185547, -122.441233019046)
-      ),
-    },
-  },
-  {
-    id: 'default-portland',
-    predictionPlace: {
-      address: 'Portland, Oregon, USA',
-      bounds: new LatLngBounds(
-        new LatLng(45.858099013046, -122.441059986416),
-        new LatLng(45.3794799927623, -122.929215816001)
+        new LatLng(59.4201525, -17.8581242),
+        new LatLng(59.0921959, -18.9111511)
       ),
     },
   },
