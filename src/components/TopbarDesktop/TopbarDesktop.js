@@ -83,6 +83,18 @@ const TopbarDesktop = props => {
         <Avatar className={css.avatar} user={currentUser} disableProfileLink />
       </MenuLabel>
       <MenuContent className={css.profileMenuContent}>
+      <MenuItem key="InboxPage">
+      <NamedLink
+        className={css.inboxLink}
+        name="InboxPage"
+        params={{ tab: currentUserHasListings ? 'sales' : 'orders' }}
+      >
+        <span className={css.inbox}>
+          <FormattedMessage id="TopbarDesktop.inbox" />
+          {notificationDot}
+        </span>
+      </NamedLink>
+      </MenuItem>
         <MenuItem key="EditListingPage">
           <OwnListingLink
             listing={currentUserListing}
@@ -175,12 +187,12 @@ const TopbarDesktop = props => {
       />
       </NamedLink>
       {search}
-      {listingLink}
-      {createListingLink}
       {inboxLink}
       {profileMenu}
       {signupLink}
       {loginLink}
+      {listingLink}
+      {createListingLink}
     </nav>
   );
 };

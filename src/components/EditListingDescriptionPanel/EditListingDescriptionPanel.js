@@ -28,9 +28,13 @@ const EditListingDescriptionPanel = props => {
 
   const classes = classNames(rootClassName || css.root, className);
   const currentListing = ensureOwnListing(listing);
-  const { description, title, publicData } = currentListing.attributes;
+  const { description, title, publicData} = currentListing.attributes;
 
   const isPublished = currentListing.id && currentListing.attributes.state !== LISTING_STATE_DRAFT;
+
+  const plantGenuses = publicData && publicData.plantGenuses;
+  const initialValues = { plantGenuses };
+
   const panelTitle = isPublished ? (
     <FormattedMessage
       id="EditListingDescriptionPanel.title"
@@ -46,7 +50,6 @@ const EditListingDescriptionPanel = props => {
     <FormattedMessage id="EditListingDescriptionPanel.createListingTitle" />
   );
 
-  const certificateOptions = findOptionsForSelectFilter('certificate', config.custom.filters);
   return (
     <div className={classes}>
       <h1 className={css.title}>{panelTitle}</h1>
@@ -55,11 +58,11 @@ const EditListingDescriptionPanel = props => {
         initialValues={{ title, description, certificate: publicData.certificate }}
         saveActionMsg={submitButtonText}
         onSubmit={values => {
-          const { title, description, certificate } = values;
+          const { title, description, plantGenuses = '' } = values;
           const updateValues = {
             title: title.trim(),
             description,
-            publicData: { certificate },
+            publicData: { plantGenuses},
           };
 
           onSubmit(updateValues);
@@ -70,7 +73,6 @@ const EditListingDescriptionPanel = props => {
         updated={panelUpdated}
         updateInProgress={updateInProgress}
         fetchErrors={errors}
-        certificateOptions={certificateOptions}
       />
     </div>
   );

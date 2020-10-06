@@ -78,6 +78,22 @@ export const filters = [
       step: 5,
     },
   },
+
+  {
+    id: 'students',
+      label: 'Students',
+      type: 'SelectSingleFilter',
+      group: 'secondary',
+      queryParamNames: ['pub_view'],
+      config: {
+        options: [
+          { key: 'single', label: 'Single class' },
+          { key: '10', label: 'Ten students' },
+          { key: '15', label: '15 students' },
+          { key: '20', label: '20 students' },
+        ],
+      },
+    },
   {
     id: 'keyword',
     label: 'Keyword',
@@ -92,20 +108,12 @@ export const filters = [
     config: {},
   },
   {
-    id: 'plantGenus',
+    id: 'plantGenuses',
     label: 'Plant genus',
-    type: 'SelectMultipleFilter',
+    type: 'SelectSingleFilter',
     group: 'secondary',
     queryParamNames: ['pub_plantGenuses'],
     config: {
-      // Optional modes: 'has_all', 'has_any'
-      // https://www.sharetribe.com/api-reference/marketplace.html#extended-data-filtering
-      searchMode: 'has_all',
-
-      // "key" is the option you see in Flex Console.
-      // "label" is set here for this web app's UI only.
-      // Note: label is not added through the translation files
-      // to make filter customizations a bit easier.
       options: [
         { key: 'anthurium', label: 'Anthurium' },
         { key: 'monstera', label: 'Monstera' },

@@ -6,10 +6,15 @@ import { intlShape, injectIntl, FormattedMessage } from '../../util/reactIntl';
 import classNames from 'classnames';
 import { propTypes } from '../../util/types';
 import { maxLength, required, composeValidators } from '../../util/validators';
-import { Form, Button, FieldTextInput } from '../../components';
+import { Form, Button, FieldTextInput, FieldSelect, FieldCurrencyInput } from '../../components';
+import { findOptionsForSelectFilter } from '../../util/search';
+import config from '../../config';
+import * as validators from '../../util/validators';
+import { formatMoney } from '../../util/currency';
+import { types as sdkTypes } from '../../util/sdkLoader';
 //import CustomCertificateSelectFieldMaybe from './CustomCertificateSelectFieldMaybe';
-
 import css from './EditListingDescriptionForm.css';
+const { Money } = sdkTypes;
 
 const TITLE_MAX_LENGTH = 60;
 
@@ -30,9 +35,11 @@ const EditListingDescriptionFormComponent = props => (
         updated,
         updateInProgress,
         fetchErrors,
+        filterConfig,
       } = formRenderProps;
 
       const titleMessage = intl.formatMessage({ id: 'EditListingDescriptionForm.title' });
+
       const titlePlaceholderMessage = intl.formatMessage({
         id: 'EditListingDescriptionForm.titlePlaceholder',
       });
@@ -55,6 +62,33 @@ const EditListingDescriptionFormComponent = props => (
       const descriptionRequiredMessage = intl.formatMessage({
         id: 'EditListingDescriptionForm.descriptionRequired',
       });
+      const pricePerUnitMessage = intl.formatMessage({
+        id: 'EditListingPricingForm.pricePerUnit',
+      });
+      const pricePlaceholderMessage = intl.formatMessage({
+        id: 'EditListingPricingForm.priceInputPlaceholder',
+      });
+      const priceRequired = validators.required(
+        intl.formatMessage({
+          id: 'EditListingPricingForm.priceRequired',
+        })
+      );
+      const minPrice = new Money(config.listingMinimumPriceSubUnits, config.currency);
+      const minPriceRequired = validators.moneySubUnitAmountAtLeast(
+        intl.formatMessage(
+          {
+            id: 'EditListingPricingForm.priceTooLow',
+          },
+          {
+            minPrice: formatMoney(intl, minPrice),
+          }
+        ),
+        config.listingMinimumPriceSubUnits
+      );
+      const priceValidators = config.listingMinimumPriceSubUnits
+        ? validators.composeValidators(priceRequired, minPriceRequired)
+        : priceRequired;
+
       const { updateListingError, createListingDraftError, showListingsError } = fetchErrors || {};
       const errorMessageUpdateListing = updateListingError ? (
         <p className={css.error}>
@@ -75,16 +109,39 @@ const EditListingDescriptionFormComponent = props => (
         </p>
       ) : null;
 
+
+
+
       const classes = classNames(css.root, className);
       const submitReady = (updated && pristine) || ready;
       const submitInProgress = updateInProgress;
       const submitDisabled = invalid || disabled || submitInProgress;
+
+      const plantGenusesKey = 'plantGenuses';
+      const plantGenusesOptions = findOptionsForSelectFilter(plantGenusesKey, filterConfig);
+
+      const unitType = config.bookingUnitType;
+      const translationKey = 'EditListingPricingForm.pricePerUnit';
+
 
       return (
         <Form className={classes} onSubmit={handleSubmit}>
           {errorMessageCreateListingDraft}
           {errorMessageUpdateListing}
           {errorMessageShowListing}
+          <FieldSelect
+            className={css.features}
+            name={plantGenusesKey}
+            id={plantGenusesKey}
+            label={'Plant genus'}
+          >
+            {plantGenusesOptions.map(o => (
+                <option key={o.key} value={o.key}>
+                  {o.label}
+                </option>
+              ))}
+          </FieldSelect>
+
           <FieldTextInput
             id="title"
             name="title"
@@ -107,6 +164,17 @@ const EditListingDescriptionFormComponent = props => (
             validate={composeValidators(required(descriptionRequiredMessage))}
           />
 
+          <FieldCurrencyInput
+            id="price"
+            name="price"
+            className={css.priceInput}
+            autoFocus
+            label={pricePerUnitMessage}
+            placeholder={pricePlaceholderMessage}
+            currencyConfig={config.currencyConfig}
+            validate={priceValidators}
+          />
+
           <Button
             className={css.submitButton}
             type="submit"
@@ -122,7 +190,7 @@ const EditListingDescriptionFormComponent = props => (
   />
 );
 
-EditListingDescriptionFormComponent.defaultProps = { className: null, fetchErrors: null };
+EditListingDescriptionFormComponent.defaultProps = { className: null, fetchErrors: null, filterConfig: config.custom.filters};
 
 EditListingDescriptionFormComponent.propTypes = {
   className: string,
@@ -138,6 +206,7 @@ EditListingDescriptionFormComponent.propTypes = {
     showListingsError: propTypes.error,
     updateListingError: propTypes.error,
   }),
+    filterConfig: propTypes.filterConfig,
 };
 
 export default compose(injectIntl)(EditListingDescriptionFormComponent);

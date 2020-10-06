@@ -21,7 +21,6 @@ import { StripeConnectAccountForm } from '../../forms';
 import EditListingWizardTab, {
   AVAILABILITY,
   DESCRIPTION,
-  FEATURES,
   POLICY,
   LOCATION,
   PRICING,
@@ -40,12 +39,11 @@ const availabilityMaybe = config.enableAvailability ? [AVAILABILITY] : [];
 // If you want to add a free text field to your listings you can enable the POLICY tab
 export const TABS = [
   DESCRIPTION,
-  FEATURES,
-  POLICY,
-  //LOCATION,
-  PRICING,
+  //POLICY,
+  LOCATION,
+  //PRICING,
   ...availabilityMaybe,
-  //PHOTOS,
+  PHOTOS,
 ];
 
 // Tabs are horizontal in small screens
@@ -58,8 +56,6 @@ const tabLabel = (intl, tab) => {
   let key = null;
   if (tab === DESCRIPTION) {
     key = 'EditListingWizard.tabLabelDescription';
-  } else if (tab === FEATURES) {
-    key = 'EditListingWizard.tabLabelFeatures';
   } else if (tab === POLICY) {
     key = 'EditListingWizard.tabLabelPolicy';
   } else if (tab === LOCATION) {
@@ -85,28 +81,19 @@ const tabLabel = (intl, tab) => {
  */
 const tabCompleted = (tab, listing) => {
   const {
-    availabilityPlan,
     description,
     geolocation,
-    price,
     title,
+    price,
     publicData,
   } = listing.attributes;
   const images = listing.images;
 
   switch (tab) {
     case DESCRIPTION:
-      return !!(description && title);
-    case FEATURES:
-      return !!(publicData && publicData.yogaStyles);
-    case POLICY:
-      return !!(publicData && typeof publicData.rules !== 'undefined');
+      return !!(description && title && price);
     case LOCATION:
       return !!(geolocation && publicData && publicData.location && publicData.location.address);
-    case PRICING:
-      return !!price;
-    case AVAILABILITY:
-      return !!availabilityPlan;
     case PHOTOS:
       return images && images.length > 0;
     default:
@@ -216,9 +203,9 @@ class EditListingWizard extends Component {
   }
 
   handlePublishListing(id) {
-    const { onPublishListingDraft, currentUser, stripeAccount } = this.props;
+  //  const { onPublishListingDraft, currentUser, stripeAccount } = this.props;
 
-    const stripeConnected =
+  /* const stripeConnected =
       currentUser && currentUser.stripeAccount && !!currentUser.stripeAccount.id;
 
     const stripeAccountData = stripeConnected ? getStripeAccountData(stripeAccount) : null;
@@ -237,7 +224,8 @@ class EditListingWizard extends Component {
       });
     }
   }
-
+*/
+}
   handlePayoutModalClose() {
     this.setState({ showPayoutDetails: false });
   }
