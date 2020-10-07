@@ -19,6 +19,7 @@ import { EditListingAvailabilityPlanForm, EditListingAvailabilityExceptionForm }
 
 import css from './EditListingAvailabilityPanel.css';
 
+/*const STOCK = [1, 2, 3, 4, 5]*/
 const WEEKDAYS = ['mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun'];
 
 // We want to sort exceptions on the client-side, maximum pagination page size is 100,
@@ -33,9 +34,14 @@ const defaultTimeZone = () =>
 /////////////
 const findEntry = (availabilityPlan, dayOfWeek) =>
   availabilityPlan.entries.find(d => d.dayOfWeek === dayOfWeek);
+/*  const findEntry = (availabilityPlan, inStock) =>
+    availabilityPlan.entries.find(s => s.inStock === inStock);*/
 
 const getEntries = (availabilityPlan, dayOfWeek) =>
   availabilityPlan.entries.filter(d => d.dayOfWeek === dayOfWeek);
+/*  const getEntries = (availabilityPlan, inStock) =>
+    availabilityPlan.entries.filter(s => s.inStock === inStock);*/
+
 
 const Weekday = props => {
   const { availabilityPlan, dayOfWeek, openEditModal } = props;
@@ -70,7 +76,7 @@ const Weekday = props => {
 ///////////////////////////////////////////////////
 
 // Create initial entry mapping for form's initial values
-const createEntryDayGroups = (entries = {}) =>
+const createEntryAvailability = (entries = {}) =>
   entries.reduce((groupedEntries, entry) => {
     const { startTime, endTime: endHour, dayOfWeek } = entry;
     const dayGroup = groupedEntries[dayOfWeek] || [];
@@ -88,11 +94,9 @@ const createEntryDayGroups = (entries = {}) =>
 
 // Create initial values
 const createInitialValues = availabilityPlan => {
-  const { timezone, entries } = availabilityPlan || {};
-  const tz = timezone || defaultTimeZone();
+  const { entries } = availabilityPlan || {};
   return {
-    timezone: tz,
-    ...createEntryDayGroups(entries),
+    ...createEntryAvailability(entries),
   };
 };
 
